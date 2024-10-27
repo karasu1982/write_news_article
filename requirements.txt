@@ -3,3 +3,4 @@ langchain-experimental == 0.3.2
 langchain_openai == 0.2.3
 openai == 1.52.2
 pandas == 2.2.2
+-e git+https://github.com/qlitre/python-notion#egg=python_notion

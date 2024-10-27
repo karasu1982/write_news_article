@@ -4,6 +4,7 @@ import os
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 NOTION_API_KEY = os.environ.get("NOTION_API_KEY")
 DATABASE_ID = os.environ.get("DATABASE_ID")
+OUTPUT_DATABASE_ID = os.environ.get("OUTPUT_DATABASE_ID")
 
 from openai import OpenAI
 
@@ -121,25 +122,45 @@ if len(df) >= 1:
 
     outputs.append(result)
 
-  # 作成された記事をフォーマット
+  # タイトル作成
+  prompt_template = PromptTemplate.from_template(
+  template = """
+  あなたはAIのテクノロジー記事を書くブロガーです。
+  次の内容をトータルで考えて、日本語でタイトルを１つ作成してください。
+  ###
+  {result}
+  """)
+
+  chain = prompt_template | llm
+
+  title = chain.invoke({"result": result})
+  title = title.content
+
+  # Notionに記事書き込み
 
   from datetime import date
+  from notion import NotionClient
 
   today = date.today()
-  today_str1 = today.strftime('%Y-%m-%d')
-  today_str2 = today.strftime('%Y%m%d')
+  today_str = today.strftime('%Y/%m/%d')
+  client = NotionClient(NOTION_API_KEY)
 
-  content = f"# {today_str1}のAI・データサイエンスニュース\n\n"
+  # 今日の記事の箱を追加
+  add_items = {'名前': f"データサイエンスニュース({today_str})：{title}", "投稿先":"note"}
+  res = client.add_page_to_database(database_id=OUTPUT_DATABASE_ID, prop_name_and_value=add_items)
+  page_id = res.json()['id']
 
   for d1, d2, out in zip(df["name"], df["url"], outputs):
-    content += f"## {d1}\n\n"
-    content += f"{d2}\n\n"
-    content += f"{out}\n\n"
-    content += f"---\n\n"
+    # 記事の中身を追加
 
-  print(content)
+    client.add_heading_to_page(page_id=page_id,
+                heading_type='heading_1',
+                content=d1)
 
-  # ファイルに書き込む
-  file_path = f"blob/news_{today_str2}.md"
-  with open(file_path, "w", encoding="utf-8") as file:
-      file.write(content)
+    client.add_paragraph_to_page(page_id=page_id,
+                  content=d2)
+
+    client.add_paragraph_to_page(page_id=page_id,
+                  content=out)
+    
+  print("今日の記事が作成されました")
