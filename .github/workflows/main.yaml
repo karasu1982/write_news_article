@@ -7,14 +7,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  numpy-test:
+  write_news_article:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@main
         with:
-          python-version: '3.8'
+          python-version: '3.10.12'
           architecture: 'x64'
       - name: Install dependencies
         run: pip install -r requirements.txt
