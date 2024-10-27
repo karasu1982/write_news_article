@@ -137,6 +137,8 @@ if len(df) >= 1:
     content += f"{out}\n\n"
     content += f"---\n\n"
 
+  print(content)
+
   # ファイルに書き込む
   file_path = f"blob/news_{today_str2}.md"
   with open(file_path, "w", encoding="utf-8") as file:
