@@ -4,7 +4,9 @@
 
 Notionは次のようなイメージ。気になったニュース記事があったら、スマホからここに格納するというのを日課にしている。
 
-![alt text](image.png)
+この記事を、ざっくりとまとめて、後で振り返られるようにする。
+
+![alt text](img/image.png)
 
 Completedがチェックされていない記事を対象に、記事の内容をまとめて、サマリをマークダウン形式で出力する。
 
@@ -17,4 +19,4 @@ Completedがチェックされていない記事を対象に、記事の内容�
 
 * テーブルのURLから、https://www.notion.so/と?で挟まれている部分を、DATABASE_IDとして保存
 
-![alt text](image-1.png)
+![alt text](img/image-1.png)
