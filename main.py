@@ -99,7 +99,7 @@ if len(df) >= 1:
   from langchain.chat_models import ChatOpenAI
   from langchain.prompts import PromptTemplate
 
-  llm = ChatOpenAI(temperature=0, model=model, openai_api_key=userdata.get('OPENAI_API_KEY'))
+  llm = ChatOpenAI(temperature=0, model=model, openai_api_key=OPENAI_API_KEY)
 
   prompt_template = PromptTemplate.from_template(
     template = """
@@ -138,6 +138,6 @@ if len(df) >= 1:
     content += f"---\n\n"
 
   # ファイルに書き込む
-  file_path = f"news_{today_str2}.md"
+  file_path = f"blob/news_{today_str2}.md"
   with open(file_path, "w", encoding="utf-8") as file:
       file.write(content)
